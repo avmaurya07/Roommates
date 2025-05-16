@@ -12,13 +12,30 @@ function MyExpenses() {
   const [sortOrder, setSortOrder] = useState("newest"); // 'newest', 'oldest', 'highest', 'lowest'
   const [expenseTypeFilter, setExpenseTypeFilter] = useState("all"); // 'all', 'split', 'paidFor', 'personal'
 
+  // Utility function to get date in IST
+  const getDateInIST = (date = new Date()) => {
+    // IST offset is UTC+5:30
+    const istOptions = { timeZone: "Asia/Kolkata" };
+    const istDateString = date.toLocaleString("en-US", istOptions);
+    return new Date(istDateString);
+  };
+
+  // Format date to YYYY-MM-DD in IST for API requests
+  const formatDateForAPI = (date) => {
+    const istDate = getDateInIST(date);
+    const year = istDate.getFullYear();
+    const month = String(istDate.getMonth() + 1).padStart(2, "0");
+    const day = String(istDate.getDate()).padStart(2, "0");
+    return `${year}-${month}-${day}`;
+  };
+
   // Date filtering
   const getCurrentMonth = () => {
-    const now = new Date();
+    const now = getDateInIST();
     const firstDay = new Date(now.getFullYear(), now.getMonth(), 1);
     return {
-      start: firstDay.toISOString().split("T")[0],
-      end: new Date().toISOString().split("T")[0],
+      start: formatDateForAPI(firstDay),
+      end: formatDateForAPI(now),
     };
   };
 
@@ -73,7 +90,12 @@ function MyExpenses() {
     }
   };
   const formatDate = (dateString) => {
-    const options = { year: "numeric", month: "short", day: "numeric" };
+    const options = {
+      year: "numeric",
+      month: "short",
+      day: "numeric",
+      timeZone: "Asia/Kolkata",
+    };
     // Check if the date is in YYYY-MM-DD format (from the date input)
     if (dateString && dateString.includes("-") && dateString.length === 10) {
       const [year, month, day] = dateString.split("-");
@@ -159,16 +181,22 @@ function MyExpenses() {
         }
         return expense.expenseType === expenseTypeFilter;
       });
-    }
-
-    // Defensive copy before sort
+    } // Defensive copy before sort
     let sorted = [...filtered];
     switch (sortOrder) {
       case "newest":
-        sorted.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+        sorted.sort(
+          (a, b) =>
+            getDateInIST(new Date(b.createdAt)) -
+            getDateInIST(new Date(a.createdAt))
+        );
         break;
       case "oldest":
-        sorted.sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt));
+        sorted.sort(
+          (a, b) =>
+            getDateInIST(new Date(a.createdAt)) -
+            getDateInIST(new Date(b.createdAt))
+        );
         break;
       case "highest":
         sorted.sort((a, b) => b.amount - a.amount);
@@ -327,7 +355,7 @@ function MyExpenses() {
                 handleDateFilterChange({ ...dateFilter, end: e.target.value })
               }
               min={dateFilter.start}
-              max={new Date().toISOString().split("T")[0]}
+              max={formatDateForAPI(new Date())}
               className="p-2 border rounded w-full md:w-auto"
               disabled={filterLoading}
             />
@@ -339,10 +367,10 @@ function MyExpenses() {
               disabled={filterLoading}
             >
               Current Month
-            </button>
+            </button>{" "}
             <button
               onClick={() => {
-                const now = new Date();
+                const now = getDateInIST();
                 const firstDay = new Date(
                   now.getFullYear(),
                   now.getMonth() - 1,
@@ -350,8 +378,8 @@ function MyExpenses() {
                 );
                 const lastDay = new Date(now.getFullYear(), now.getMonth(), 0);
                 handleDateFilterChange({
-                  start: firstDay.toISOString().split("T")[0],
-                  end: lastDay.toISOString().split("T")[0],
+                  start: formatDateForAPI(firstDay),
+                  end: formatDateForAPI(lastDay),
                 });
               }}
               className="px-4 py-1.5 bg-gray-100 hover:bg-gray-200 rounded transition text-sm"
@@ -361,28 +389,29 @@ function MyExpenses() {
             </button>
           </div>
           <div className="flex flex-col justify-end gap-2">
+            {" "}
             <button
               onClick={() => {
-                const today = new Date();
+                const today = getDateInIST();
                 const startOfWeek = new Date(today);
                 startOfWeek.setDate(today.getDate() - today.getDay());
                 handleDateFilterChange({
-                  start: startOfWeek.toISOString().split("T")[0],
-                  end: today.toISOString().split("T")[0],
+                  start: formatDateForAPI(startOfWeek),
+                  end: formatDateForAPI(today),
                 });
               }}
               className="px-4 py-1.5 bg-green-100 hover:bg-green-200 rounded transition text-sm"
               disabled={filterLoading}
             >
               Current Week
-            </button>
+            </button>{" "}
             <button
               onClick={() => {
-                const now = new Date();
+                const now = getDateInIST();
                 const startOfYear = new Date(now.getFullYear(), 0, 1);
                 handleDateFilterChange({
-                  start: startOfYear.toISOString().split("T")[0],
-                  end: now.toISOString().split("T")[0],
+                  start: formatDateForAPI(startOfYear),
+                  end: formatDateForAPI(now),
                 });
               }}
               className="px-4 py-1.5 bg-amber-100 hover:bg-amber-200 rounded transition text-sm"
