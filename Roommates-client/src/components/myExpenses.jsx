@@ -100,21 +100,26 @@ function MyExpenses() {
         break;
       case "owed":
         filtered = expenses.filter((expense) => {
-          // Include both split expenses where current user is part of split
+          // Defensive: ensure arrays exist
+          const splitWith = Array.isArray(expense.splitWith)
+            ? expense.splitWith
+            : [];
+          const paidFor = Array.isArray(expense.paidFor) ? expense.paidFor : [];
+
+          // Split: user is not payer but is in splitWith
           if (
             (!expense.expenseType || expense.expenseType === "split") &&
             expense.paidBy !== currentUserId &&
-            expense.splitWith.includes(currentUserId)
+            splitWith.includes(currentUserId)
           ) {
             return true;
           }
 
-          // Include expenses where someone else paid for current user
+          // PaidFor: user is not payer but is in paidFor
           if (
             expense.expenseType === "paidFor" &&
             expense.paidBy !== currentUserId &&
-            expense.paidFor &&
-            expense.paidFor.includes(currentUserId)
+            paidFor.includes(currentUserId)
           ) {
             return true;
           }
@@ -124,25 +129,31 @@ function MyExpenses() {
         break;
       default:
         filtered = expenses.filter((expense) => {
-          const isInvolved =
-            // User paid
-            expense.paidBy === currentUserId ||
-            // User is in split
-            ((!expense.expenseType || expense.expenseType === "split") &&
-              expense.splitWith.includes(currentUserId)) ||
-            // User was paid for
-            (expense.expenseType === "paidFor" &&
-              expense.paidFor &&
-              expense.paidFor.includes(currentUserId));
-
-          return isInvolved;
+          const splitWith = Array.isArray(expense.splitWith)
+            ? expense.splitWith
+            : [];
+          const paidFor = Array.isArray(expense.paidFor) ? expense.paidFor : [];
+          // User paid
+          if (expense.paidBy === currentUserId) return true;
+          // User is in split
+          if (
+            (!expense.expenseType || expense.expenseType === "split") &&
+            splitWith.includes(currentUserId)
+          )
+            return true;
+          // User was paid for
+          if (
+            expense.expenseType === "paidFor" &&
+            paidFor.includes(currentUserId)
+          )
+            return true;
+          return false;
         });
     }
 
     // Then filter by expense type
     if (expenseTypeFilter !== "all") {
       filtered = filtered.filter((expense) => {
-        // Handle the case of expenses created before expenseType was added
         if (!expense.expenseType && expenseTypeFilter === "split") {
           return true;
         }
@@ -150,99 +161,107 @@ function MyExpenses() {
       });
     }
 
-    // Then sort
+    // Defensive copy before sort
+    let sorted = [...filtered];
     switch (sortOrder) {
       case "newest":
-        return filtered.sort(
-          (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
-        );
+        sorted.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+        break;
       case "oldest":
-        return filtered.sort(
-          (a, b) => new Date(a.createdAt) - new Date(b.createdAt)
-        );
+        sorted.sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt));
+        break;
       case "highest":
-        return filtered.sort((a, b) => b.amount - a.amount);
+        sorted.sort((a, b) => b.amount - a.amount);
+        break;
       case "lowest":
-        return filtered.sort((a, b) => a.amount - b.amount);
+        sorted.sort((a, b) => a.amount - b.amount);
+        break;
       default:
-        return filtered;
+        break;
     }
+    return sorted;
   };
   const calculateMyShare = (expense) => {
     const currentUserId = getCurrentUserId();
+    const splitWith = Array.isArray(expense.splitWith) ? expense.splitWith : [];
+    const paidFor = Array.isArray(expense.paidFor) ? expense.paidFor : [];
 
-    // Handle different expense types
     if (!expense.expenseType || expense.expenseType === "split") {
-      // Traditional split expense
-      const totalPeople = expense.splitWith.length + 1; // +1 for the person who paid
-      const equalShare = expense.amount / totalPeople;
+      // For split expenses, everyone in splitWith pays an equal share
+      // This includes the payer (who must also be in splitWith array)
+      const totalPeople = splitWith.length;
+      // Guard against division by zero
+      const equalShare =
+        totalPeople > 0 ? expense.amount / totalPeople : expense.amount;
 
       if (expense.paidBy === currentUserId) {
-        // I paid, I'm owed money from others
-        return {
-          amount: expense.amount - equalShare,
-          type: "owed to you",
-        };
-      } else {
-        // Someone else paid, I owe them
+        // I paid
+        if (totalPeople === 1 && splitWith[0] === currentUserId) {
+          // Only I am in the split, so it's just for me
+          return { amount: 0, type: "personal expense" };
+        } else {
+          // I paid for a group that includes me
+          // I'm owed the full amount minus my share
+          return {
+            amount: expense.amount - equalShare,
+            type: "owed to you",
+          };
+        }
+      } else if (splitWith.includes(currentUserId)) {
+        // Someone else paid, I'm in the split
         return {
           amount: equalShare,
           type: "you owe",
         };
+      } else {
+        // Not involved
+        return { amount: 0, type: "not involved" };
       }
     } else if (expense.expenseType === "paidFor") {
-      // "Paid For" expense type
+      // For paidFor expenses (someone paid on behalf of others)
+      const totalPeople = paidFor.length;
+      if (totalPeople === 0) {
+        return { amount: 0, type: "personal expense" };
+      }
+
+      const sharePerPerson = expense.amount / totalPeople;
+
       if (expense.paidBy === currentUserId) {
         // I paid for others
-        const isPaidForSelf = expense.paidFor.includes(currentUserId);
-
-        if (isPaidForSelf && expense.paidFor.length === 1) {
-          // I paid only for myself
+        if (paidFor.includes(currentUserId)) {
+          // I'm also in the paidFor list
+          const others = paidFor.filter((id) => id !== currentUserId).length;
           return {
-            amount: 0,
-            type: "personal expense",
+            amount: sharePerPerson * others,
+            type: "paid for others",
           };
         } else {
-          // I paid for others (and maybe myself)
+          // Paid only for others
           return {
             amount: expense.amount,
             type: "paid for others",
           };
         }
-      } else if (expense.paidFor.includes(currentUserId)) {
+      } else if (paidFor.includes(currentUserId)) {
         // Someone else paid for me
         return {
-          amount: expense.amount,
+          amount: sharePerPerson,
           type: "paid for you",
         };
       } else {
-        // This expense doesn't involve me
-        return {
-          amount: 0,
-          type: "not involved",
-        };
+        // Not involved
+        return { amount: 0, type: "not involved" };
       }
     } else if (expense.expenseType === "personal") {
-      // Personal expense
       if (expense.paidBy === currentUserId) {
-        return {
-          amount: 0,
-          type: "personal expense",
-        };
+        return { amount: 0, type: "personal expense" };
       } else {
-        // This shouldn't happen, but just in case
-        return {
-          amount: 0,
-          type: "not involved",
-        };
+        return { amount: 0, type: "not involved" };
       }
     }
 
     // Default fallback
-    return {
-      amount: 0,
-      type: "unknown",
-    };
+    return { amount: 0, type: "unknown" };
   };
 
   return (

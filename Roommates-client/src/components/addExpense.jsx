@@ -130,29 +130,27 @@ function AddExpense() {
       formData.append("amount", amount);
       formData.append("description", description);
       formData.append("paidBy", currentUser.userId);
-      formData.append("expenseType", expenseType); // Add appropriate user selections based on expense type
+
       if (expenseType === "split") {
         const selectedUserIds = Object.keys(selectedUsers).filter(
           (userId) => selectedUsers[userId]
         );
+        const includeCurrentUser = selectedUserIds.includes(currentUser.userId);
 
-        // Check if current user is included in selection
-        const includeCurrentUser = selectedUsers[currentUser.userId] || false;
-
-        formData.append("splitWith", JSON.stringify(selectedUserIds));
-
-        // If current user is not included in split, it's essentially "paid for others"
         if (includeCurrentUser) {
-          // Traditional split - current user is both payer and participant
+          // Split among all selected users (including payer)
           formData.append("expenseType", "split");
+          formData.append("splitWith", JSON.stringify(selectedUserIds));
           formData.append("paidFor", JSON.stringify([]));
         } else {
-          // Paid for others - current user is payer but not participant
+          // Payer is not included, so it's a paidFor expense
           formData.append("expenseType", "paidFor");
+          formData.append("splitWith", JSON.stringify([]));
           formData.append("paidFor", JSON.stringify(selectedUserIds));
         }
       } else if (expenseType === "personal") {
         // Personal expense - only for current user
+        formData.append("expenseType", "personal");
         formData.append("paidFor", JSON.stringify([currentUser.userId]));
         formData.append("splitWith", JSON.stringify([]));
       }

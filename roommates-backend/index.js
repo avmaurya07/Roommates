@@ -422,12 +422,12 @@ app.get("/api/expenses", async (req, res) => {
       return res.status(400).json({ message: "UserId is required" });
     }
 
-    const expenses = await readJSON("expenses.json");
-
-    // Filter expenses by user
+    const expenses = await readJSON("expenses.json"); // Filter expenses by user
     let userExpenses = expenses.filter(
       (expense) =>
-        expense.paidBy === userId || expense.splitWith.includes(userId)
+        expense.paidBy === userId ||
+        expense.splitWith.includes(userId) ||
+        (expense.paidFor && expense.paidFor.includes(userId))
     );
 
     // Apply date filtering if provided
