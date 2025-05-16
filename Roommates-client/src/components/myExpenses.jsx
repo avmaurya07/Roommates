@@ -239,7 +239,8 @@ function MyExpenses() {
           // Paid only for others
           return {
             amount: expense.amount,
-            type: "paid for others",
+            amountPerPerson: sharePerPerson,
+            type: "paid for others (₹" + sharePerPerson.toFixed(2) + " each)",
           };
         }
       } else if (paidFor.includes(currentUserId)) {
@@ -575,11 +576,11 @@ function MyExpenses() {
                       <span className="font-medium">
                         ₹{expense.amount.toFixed(2)}
                       </span>
-                    </span>
+                    </span>{" "}
                     <span
                       className={
                         myShare.type === "owed to you" ||
-                        myShare.type === "paid for others"
+                        myShare.type.includes("paid for others")
                           ? "text-green-600"
                           : myShare.type === "you owe" ||
                             myShare.type === "paid for you"
@@ -595,6 +596,11 @@ function MyExpenses() {
                         </>
                       )}
                       {myShare.type}
+                      {myShare.amountPerPerson && (
+                        <div className="text-xs text-gray-600 mt-1">
+                          (₹{myShare.amountPerPerson.toFixed(2)} per person)
+                        </div>
+                      )}
                     </span>
                   </div>
                   {/* Expense type badge */}

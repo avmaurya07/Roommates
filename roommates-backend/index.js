@@ -557,17 +557,23 @@ app.get("/api/summary", async (req, res) => {
         // Handle "paid for" expense type
         if (expense.paidBy === userId) {
           // Current user paid for others
+          const totalPeople = expense.paidFor.length;
+          const sharePerPerson = expense.amount / totalPeople;
+
           expense.paidFor.forEach((paidForUserId) => {
             if (paidForUserId !== userId && balances[paidForUserId]) {
-              // The other user owes the full amount to the current user
-              balances[paidForUserId].amount += expense.amount;
+              // Each user owes their share to the current user
+              balances[paidForUserId].amount += sharePerPerson;
             }
           });
         } else if (expense.paidFor.includes(userId)) {
           // Someone else paid for current user
+          const totalPeople = expense.paidFor.length;
+          const sharePerPerson = expense.amount / totalPeople;
+
           if (balances[expense.paidBy]) {
-            // Current user owes the full amount to the person who paid
-            balances[expense.paidBy].amount -= expense.amount;
+            // Current user owes their share to the person who paid
+            balances[expense.paidBy].amount -= sharePerPerson;
           }
         }
       }

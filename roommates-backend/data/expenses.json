@@ -94,5 +94,41 @@
       "avmaurya07": "Avinash Maurya"
     },
     "createdAt": "2025-05-16T16:46:39.594Z"
+  },
+  {
+    "id": "mar1kf41cchp4rgsg06",
+    "amount": 1000,
+    "description": "hhh",
+    "paidBy": "avmaurya07",
+    "paidByName": "Avinash Maurya",
+    "splitWith": [
+      "avmaurya07",
+      "shikhar"
+    ],
+    "paidFor": [],
+    "expenseType": "split",
+    "userNames": {
+      "avmaurya07": "Avinash Maurya",
+      "shikhar": "Shikhar Singh"
+    },
+    "createdAt": "2025-05-16T16:57:32.545Z"
+  },
+  {
+    "id": "mar1l33eg6kgveuyr74",
+    "amount": 1400,
+    "description": "jkl",
+    "paidBy": "shikhar",
+    "paidByName": "Shikhar Singh",
+    "splitWith": [
+      "avmaurya07",
+      "shikhar"
+    ],
+    "paidFor": [],
+    "expenseType": "split",
+    "userNames": {
+      "avmaurya07": "Avinash Maurya",
+      "shikhar": "Shikhar Singh"
+    },
+    "createdAt": "2025-05-16T16:58:03.626Z"
   }
 ]
