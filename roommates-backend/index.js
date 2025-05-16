@@ -427,7 +427,7 @@ app.get("/api/expenses", async (req, res) => {
       (expense) =>
         expense.paidBy === userId ||
         expense.splitWith.includes(userId) ||
-        (expense.paidFor && expense.paidFor.includes(userId))
+        expense.paidFor.includes(userId)
     );
 
     // Apply date filtering if provided
