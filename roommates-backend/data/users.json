@@ -1,0 +1,21 @@
+[
+  {
+    "userId": "avmaurya007",
+    "name": "hello",
+    "password": "1234",
+    "isAdmin": false,
+    "isTempPassword": true,
+    "isActive": true
+  },
+  {
+    "userId": "avmaurya07",
+    "name": "Avinash Maurya",
+    "email": "avmaurya07@gmail.com",
+    "password": "1234",
+    "isAdmin": true,
+    "isTempPassword": true,
+    "isActive": true,
+    "createdBy": "avmaurya07",
+    "createdAt": "2025-05-16T14:31:43.613Z"
+  }
+]

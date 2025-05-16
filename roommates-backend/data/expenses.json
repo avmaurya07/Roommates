@@ -1,0 +1,64 @@
+[
+  {
+    "id": "maqt6hd6sft58ili8he",
+    "amount": 20,
+    "description": "vsd",
+    "paidBy": "avmaurya007",
+    "paidByName": "hello",
+    "splitWith": [
+      "avmaurya07"
+    ],
+    "userNames": {
+      "avmaurya07": "Avinash Maurya",
+      "avmaurya007": "hello"
+    },
+    "createdAt": "2025-05-16T13:02:45.354Z"
+  },
+  {
+    "id": "maqtuuwfyu4hsvhqn2h",
+    "amount": 10,
+    "description": "aa",
+    "paidBy": "avmaurya07",
+    "paidByName": "Avinash Maurya",
+    "splitWith": [
+      "avmaurya007"
+    ],
+    "userNames": {
+      "avmaurya007": "hello",
+      "avmaurya07": "Avinash Maurya"
+    },
+    "createdAt": "2025-05-16T13:21:42.639Z"
+  },
+  {
+    "id": "maqu02p8846ff4g955r",
+    "amount": 4.99,
+    "description": "dd",
+    "paidBy": "avmaurya07",
+    "paidByName": "Avinash Maurya",
+    "splitWith": [
+      "avmaurya007"
+    ],
+    "userNames": {
+      "avmaurya007": "hello",
+      "avmaurya07": "Avinash Maurya"
+    },
+    "createdAt": "2025-05-16T13:25:46.028Z",
+    "receiptUrl": "/uploads/1747401945913-206300819.png"
+  },
+  {
+    "id": "maqubeozktqibr2sbxr",
+    "amount": 11,
+    "description": "dd",
+    "paidBy": "avmaurya07",
+    "paidByName": "Avinash Maurya",
+    "splitWith": [
+      "avmaurya007"
+    ],
+    "userNames": {
+      "avmaurya007": "hello",
+      "avmaurya07": "Avinash Maurya"
+    },
+    "createdAt": "2025-05-16T13:34:34.787Z",
+    "receiptUrl": "/uploads/1747402474752-529695201.png"
+  }
+]
