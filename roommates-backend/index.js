@@ -532,65 +532,66 @@ app.get("/api/summary", async (req, res) => {
           amount: 0, // Positive: they owe you, Negative: you owe them
         };
       }
-    }); // Process expenses
+    });
+
+    // Process expenses
     expenses.forEach((expense) => {
-      // Handle different expense types
+      const splitWith = Array.isArray(expense.splitWith)
+        ? expense.splitWith
+        : [];
+      const paidFor = Array.isArray(expense.paidFor) ? expense.paidFor : [];
+
+      // Skip personal expenses as they don't affect balances between users
+      if (expense.expenseType === "personal") {
+        return;
+      }
+
+      // Handle "split" expense type
       if (expense.expenseType === "split" || !expense.expenseType) {
-        // Traditional split expense
-        const totalPeople = expense.splitWith.length + 1; // +1 for the person who paid
+        const totalPeople = splitWith.length;
+        if (totalPeople === 0) return; // No one to split with
+
         const sharePerPerson = expense.amount / totalPeople;
 
         if (expense.paidBy === userId) {
-          // Current user paid
-          expense.splitWith.forEach((splitUserId) => {
-            if (balances[splitUserId]) {
+          splitWith.forEach((splitUserId) => {
+            if (splitUserId !== userId && balances[splitUserId]) {
               balances[splitUserId].amount += sharePerPerson;
             }
           });
-        } else if (expense.splitWith.includes(userId)) {
-          // Current user is part of split
+        } else if (splitWith.includes(userId)) {
           if (balances[expense.paidBy]) {
-            balances[expense.paidBy].amount -= sharePerPerson;
-          }
-        }
-      } else if (expense.expenseType === "paidFor") {
-        // Handle "paid for" expense type
-        if (expense.paidBy === userId) {
-          // Current user paid for others
-          const totalPeople = expense.paidFor.length;
-          const sharePerPerson = expense.amount / totalPeople;
-
-          expense.paidFor.forEach((paidForUserId) => {
-            if (paidForUserId !== userId && balances[paidForUserId]) {
-              // Each user owes their share to the current user
-              balances[paidForUserId].amount += sharePerPerson;
-            }
-          });
-        } else if (expense.paidFor.includes(userId)) {
-          // Someone else paid for current user
-          const totalPeople = expense.paidFor.length;
-          const sharePerPerson = expense.amount / totalPeople;
-
-          if (balances[expense.paidBy]) {
-            // Current user owes their share to the person who paid
             balances[expense.paidBy].amount -= sharePerPerson;
           }
         }
       }
-      // Personal expenses don't affect balances
-    }); // Process payments
+
+      // Handle "paidFor" expense type
+      if (expense.expenseType === "paidFor") {
+        const totalPeople = paidFor.length;
+        if (totalPeople === 0) return; // No one to pay for
+
+        const sharePerPerson = expense.amount / totalPeople;
+
+        if (expense.paidBy === userId) {
+          paidFor.forEach((paidForUserId) => {
+            if (paidForUserId !== userId && balances[paidForUserId]) {
+              balances[paidForUserId].amount += sharePerPerson;
+            }
+          });
+        } else if (paidFor.includes(userId)) {
+          if (balances[expense.paidBy]) {
+            balances[expense.paidBy].amount -= sharePerPerson;
+          }
+        }
+      }
+    });
+
+    // Process payments
     payments.forEach((payment) => {
       if (payment.paidBy === userId && balances[payment.paidTo]) {
-        // Current user paid to someone else
-        // When I pay someone:
-        // If balance is negative (I owe them), paying them reduces my debt (makes balance less negative)
-        // If balance is positive (they owe me), paying them is like lending them more money (unusual)
         balances[payment.paidTo].amount += payment.amount;
       } else if (payment.paidTo === userId && balances[payment.paidBy]) {
-        // Someone else paid to current user
-        // When someone pays me:
-        // If balance is positive (they owe me), their payment reduces their debt (makes balance less positive)
-        // If balance is negative (I owe them), their payment is like them lending me more money (unusual)
         balances[payment.paidBy].amount -= payment.amount;
       }
     });

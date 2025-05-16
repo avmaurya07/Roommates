@@ -1,1 +1,11 @@
-[]
+[
+  {
+    "id": "mar4ge55uyqhxjsy4th",
+    "paidBy": "user2",
+    "paidByName": "user2",
+    "paidTo": "avmaurya07",
+    "paidToName": "Avinash Maurya",
+    "amount": 100,
+    "createdAt": "2025-05-16T18:18:23.513Z"
+  }
+]
