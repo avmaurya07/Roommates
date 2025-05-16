@@ -1,6 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import config from "../config";
+import {
+  formatDateForDisplay,
+  formatSimpleDate,
+  getCurrentDateIST,
+  formatDateForAPI,
+} from "../utils/dateUtils";
 
 function MyExpenses() {
   const baseURL = config.baseURL;
@@ -11,27 +17,10 @@ function MyExpenses() {
   const [selectedTab, setSelectedTab] = useState("all"); // 'all', 'paid', 'owed'
   const [sortOrder, setSortOrder] = useState("newest"); // 'newest', 'oldest', 'highest', 'lowest'
   const [expenseTypeFilter, setExpenseTypeFilter] = useState("all"); // 'all', 'split', 'paidFor', 'personal'
-
-  // Utility function to get date in IST
-  const getDateInIST = (date = new Date()) => {
-    // IST offset is UTC+5:30
-    const istOptions = { timeZone: "Asia/Kolkata" };
-    const istDateString = date.toLocaleString("en-US", istOptions);
-    return new Date(istDateString);
-  };
-
-  // Format date to YYYY-MM-DD in IST for API requests
-  const formatDateForAPI = (date) => {
-    const istDate = getDateInIST(date);
-    const year = istDate.getFullYear();
-    const month = String(istDate.getMonth() + 1).padStart(2, "0");
-    const day = String(istDate.getDate()).padStart(2, "0");
-    return `${year}-${month}-${day}`;
-  };
-
+  // Using shared date utilities from dateUtils.js
   // Date filtering
   const getCurrentMonth = () => {
-    const now = getDateInIST();
+    const now = getCurrentDateIST();
     const firstDay = new Date(now.getFullYear(), now.getMonth(), 1);
     return {
       start: formatDateForAPI(firstDay),
@@ -90,19 +79,8 @@ function MyExpenses() {
     }
   };
   const formatDate = (dateString) => {
-    const options = {
-      year: "numeric",
-      month: "short",
-      day: "numeric",
-      timeZone: "Asia/Kolkata",
-    };
-    // Check if the date is in YYYY-MM-DD format (from the date input)
-    if (dateString && dateString.includes("-") && dateString.length === 10) {
-      const [year, month, day] = dateString.split("-");
-      const date = new Date(year, month - 1, day); // months are 0-indexed in JS
-      return date.toLocaleDateString(undefined, options);
-    }
-    return new Date(dateString).toLocaleDateString(undefined, options);
+    // Use our dateUtils function for consistent IST formatting
+    return formatSimpleDate(dateString);
   };
 
   const getCurrentUserId = () => {
@@ -185,18 +163,10 @@ function MyExpenses() {
     let sorted = [...filtered];
     switch (sortOrder) {
       case "newest":
-        sorted.sort(
-          (a, b) =>
-            getDateInIST(new Date(b.createdAt)) -
-            getDateInIST(new Date(a.createdAt))
-        );
+        sorted.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
         break;
       case "oldest":
-        sorted.sort(
-          (a, b) =>
-            getDateInIST(new Date(a.createdAt)) -
-            getDateInIST(new Date(b.createdAt))
-        );
+        sorted.sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt));
         break;
       case "highest":
         sorted.sort((a, b) => b.amount - a.amount);
@@ -370,7 +340,7 @@ function MyExpenses() {
             </button>{" "}
             <button
               onClick={() => {
-                const now = getDateInIST();
+                const now = getCurrentDateIST();
                 const firstDay = new Date(
                   now.getFullYear(),
                   now.getMonth() - 1,
@@ -392,7 +362,7 @@ function MyExpenses() {
             {" "}
             <button
               onClick={() => {
-                const today = getDateInIST();
+                const today = getCurrentDateIST();
                 const startOfWeek = new Date(today);
                 startOfWeek.setDate(today.getDate() - today.getDay());
                 handleDateFilterChange({
@@ -407,7 +377,7 @@ function MyExpenses() {
             </button>{" "}
             <button
               onClick={() => {
-                const now = getDateInIST();
+                const now = getCurrentDateIST();
                 const startOfYear = new Date(now.getFullYear(), 0, 1);
                 handleDateFilterChange({
                   start: formatDateForAPI(startOfYear),

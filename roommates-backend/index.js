@@ -10,6 +10,7 @@ const path = require("path");
 const fs = require("fs/promises");
 const multer = require("multer");
 const emailService = require("./emailService");
+const dateUtils = require("./dateUtils");
 
 // Configure multer for file uploads
 const storage = multer.diskStorage({
@@ -69,7 +70,7 @@ const userDefaults = {
 const expenseDefaults = {
   amount: 0,
   description: "",
-  date: new Date().toISOString(),
+  date: dateUtils.toISOStringIST(),
   createdBy: "",
   image: null,
   participants: [],
@@ -80,7 +81,7 @@ const paymentDefaults = {
   amount: 0,
   paidBy: "",
   paidTo: "",
-  date: new Date().toISOString(),
+  date: dateUtils.toISOStringIST(),
   relatedExpenseId: null,
 };
 
@@ -173,7 +174,7 @@ app.post("/api/register", async (req, res) => {
       isTempPassword: true, // Force user to change password on first login
       isActive: true,
       createdBy: adminId,
-      createdAt: new Date().toISOString(),
+      createdAt: dateUtils.toISOStringIST(),
     };
     users.push(newUser);
     await writeJSON("users.json", users);
@@ -382,7 +383,7 @@ app.post("/api/expenses", upload.single("receipt"), async (req, res) => {
           : [],
       expenseType: expenseType || "split", // Default to split if not specified
       userNames,
-      createdAt: new Date().toISOString(),
+      createdAt: dateUtils.toISOStringIST(),
     };
 
     // Add receipt URL if a file was uploaded
@@ -433,10 +434,9 @@ app.get("/api/expenses", async (req, res) => {
 
     // Apply date filtering if provided
     if (startDate && endDate) {
-      const start = new Date(startDate);
-      const end = new Date(endDate);
-      // Set end date to end of the day
-      end.setHours(23, 59, 59, 999);
+      // Use dateUtils to correctly handle IST date parsing
+      const start = dateUtils.getStartOfDayIST(new Date(startDate));
+      const end = dateUtils.getEndOfDayIST(new Date(endDate));
 
       userExpenses = userExpenses.filter((expense) => {
         const expenseDate = new Date(expense.createdAt);
@@ -474,7 +474,6 @@ app.post("/api/payments", async (req, res) => {
     if (!paidByUser || !paidToUser) {
       return res.status(404).json({ message: "One or both users not found" });
     }
-
     const newPayment = {
       id: generateId(),
       paidBy,
@@ -482,7 +481,7 @@ app.post("/api/payments", async (req, res) => {
       paidTo,
       paidToName: paidToUser.name,
       amount: parseFloat(amount),
-      createdAt: new Date().toISOString(),
+      createdAt: dateUtils.toISOStringIST(),
     };
     payments.push(newPayment);
     await writeJSON("payments.json", payments);
@@ -809,14 +808,12 @@ app.post("/api/admin/remote-login", async (req, res) => {
       return res
         .status(404)
         .json({ message: "Target user not found or inactive" });
-    }
-
-    // Create a session object with both admin and target user info for auditing
+    } // Create a session object with both admin and target user info for auditing
     const sessionInfo = {
       ...targetUser,
       _adminSession: {
         adminId: adminId,
-        timestamp: new Date().toISOString(),
+        timestamp: dateUtils.toISOStringIST(),
         remoteSession: true,
       },
     };

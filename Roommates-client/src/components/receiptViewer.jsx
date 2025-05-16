@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import config from "../config";
+import { formatDateForDisplay } from "../utils/dateUtils";
 
 function ReceiptViewer() {
   const baseURL = config.baseURL;
@@ -38,14 +39,8 @@ function ReceiptViewer() {
   };
 
   const formatDate = (dateString) => {
-    const options = {
-      year: "numeric",
-      month: "short",
-      day: "numeric",
-      hour: "2-digit",
-      minute: "2-digit",
-    };
-    return new Date(dateString).toLocaleDateString(undefined, options);
+    // Use our dateUtils function for consistent IST formatting
+    return formatDateForDisplay(dateString);
   };
 
   return (

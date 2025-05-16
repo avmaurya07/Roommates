@@ -1,5 +1,6 @@
 const fs = require("fs").promises;
 const path = require("path");
+const dateUtils = require("./dateUtils");
 
 const readJSON = async (filename) => {
   try {
@@ -48,7 +49,7 @@ const initializeDefaultUsers = async () => {
       isTempPassword: false,
       isActive: true,
       createdBy: "system",
-      createdAt: new Date().toISOString(),
+      createdAt: dateUtils.toISOStringIST(),
     };
 
     users.push(defaultAdmin);

@@ -1,5 +1,11 @@
 import React, { useState, useEffect } from "react";
 import config from "../config";
+import {
+  formatDateForDisplay,
+  formatSimpleDate,
+  getCurrentDateIST,
+  formatDateForAPI,
+} from "../utils/dateUtils";
 
 function PaymentHistory() {
   const baseURL = config.baseURL;
@@ -8,14 +14,13 @@ function PaymentHistory() {
   const [filterLoading, setFilterLoading] = useState(false);
   const [error, setError] = useState(null);
   const [currentUser, setCurrentUser] = useState(null);
-
-  // Date filtering
+  // Date filtering with IST timezone
   const getCurrentMonth = () => {
-    const now = new Date();
+    const now = getCurrentDateIST();
     const firstDay = new Date(now.getFullYear(), now.getMonth(), 1);
     return {
-      start: firstDay.toISOString().split("T")[0],
-      end: new Date().toISOString().split("T")[0],
+      start: formatDateForAPI(firstDay),
+      end: formatDateForAPI(now),
     };
   };
 
@@ -80,14 +85,8 @@ function PaymentHistory() {
   };
 
   const formatDate = (dateString) => {
-    const options = {
-      year: "numeric",
-      month: "short",
-      day: "numeric",
-      hour: "2-digit",
-      minute: "2-digit",
-    };
-    return new Date(dateString).toLocaleDateString(undefined, options);
+    // Use our dateUtils function for consistent IST formatting
+    return formatDateForDisplay(dateString);
   };
   return (
     <div className="container mx-auto p-4">
@@ -115,7 +114,7 @@ function PaymentHistory() {
           <div className="w-full md:w-auto">
             <label className="block text-sm font-medium text-gray-700 mb-1">
               To
-            </label>
+            </label>{" "}
             <input
               type="date"
               value={dateFilter.end}
@@ -123,7 +122,7 @@ function PaymentHistory() {
                 handleDateFilterChange({ ...dateFilter, end: e.target.value })
               }
               min={dateFilter.start}
-              max={new Date().toISOString().split("T")[0]}
+              max={formatDateForAPI(new Date())}
               className="p-2 border rounded w-full md:w-auto"
               disabled={filterLoading}
             />

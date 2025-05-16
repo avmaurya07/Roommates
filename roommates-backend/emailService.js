@@ -1,4 +1,5 @@
 const nodemailer = require("nodemailer");
+const dateUtils = require("./dateUtils");
 
 // Create reusable transporter object using SMTP transport
 const transporter = nodemailer.createTransport({
@@ -10,6 +11,21 @@ const transporter = nodemailer.createTransport({
     pass: process.env.EMAIL_PASSWORD || "dummy-password-replace-this",
   },
 });
+
+// Format date for display in emails (IST format)
+const formatDateForDisplay = (dateString) => {
+  const date = new Date(dateString);
+  // IST options (UTC+5:30)
+  const options = {
+    timeZone: "Asia/Kolkata",
+    year: "numeric",
+    month: "short",
+    day: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+  };
+  return date.toLocaleString("en-US", options);
+};
 
 // Check if we have a valid email password configuration
 const hasValidEmailConfig =
@@ -135,9 +151,9 @@ const sendNewExpenseEmail = async (expense, users) => {
             <p><strong>Amount:</strong> ₹${expense.amount.toFixed(2)}</p>
             <p><strong>Paid by:</strong> ${expense.paidByName}</p>
             <p><strong>Type:</strong> ${expenseTypeText}</p>
-            <p><strong>Date:</strong> ${new Date(
+            <p><strong>Date:</strong> ${formatDateForDisplay(
               expense.createdAt
-            ).toLocaleString()}</p>
+            )}</p>
           </div>
           
           ${
@@ -199,9 +215,9 @@ const sendNewPaymentEmail = async (payment, users) => {
             <p><strong>From:</strong> ${payment.paidByName}</p>
             <p><strong>To:</strong> ${payment.paidToName}</p>
             <p><strong>Amount:</strong> ₹${payment.amount.toFixed(2)}</p>
-            <p><strong>Date:</strong> ${new Date(
+            <p><strong>Date:</strong> ${formatDateForDisplay(
               payment.createdAt
-            ).toLocaleString()}</p>
+            )}</p>
           </div>
           
           <p>This payment has been recorded successfully in the Roommates App.</p>
