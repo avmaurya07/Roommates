@@ -13,6 +13,8 @@ function AddExpense() {
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
   const [currentUser, setCurrentUser] = useState(null);
+  const [notification, setNotification] = useState("");
+  const [showNotification, setShowNotification] = useState(false);
 
   useEffect(() => {
     const userData = JSON.parse(localStorage.getItem("userData"));
@@ -137,16 +139,30 @@ function AddExpense() {
         );
         const includeCurrentUser = selectedUserIds.includes(currentUser.userId);
 
-        if (includeCurrentUser) {
+        // Check if only current user is selected in split expense
+        if (includeCurrentUser && selectedUserIds.length === 1) {
+          // Treat as personal expense when only current user is selected
+          formData.append("expenseType", "personal");
+          formData.append("paidFor", JSON.stringify([currentUser.userId]));
+          formData.append("splitWith", JSON.stringify([]));
+          setNotification(
+            "Only you were selected, so this was saved as a personal expense."
+          );
+          setShowNotification(true);
+        } else if (includeCurrentUser) {
           // Split among all selected users (including payer)
           formData.append("expenseType", "split");
           formData.append("splitWith", JSON.stringify(selectedUserIds));
           formData.append("paidFor", JSON.stringify([]));
+          setNotification("");
+          setShowNotification(false);
         } else {
           // Payer is not included, so it's a paidFor expense
           formData.append("expenseType", "paidFor");
           formData.append("splitWith", JSON.stringify([]));
           formData.append("paidFor", JSON.stringify(selectedUserIds));
+          setNotification("");
+          setShowNotification(false);
         }
       } else if (expenseType === "personal") {
         // Personal expense - only for current user
@@ -174,6 +190,11 @@ function AddExpense() {
       setDescription("");
       setImage(null);
       setExpenseType("split"); // Reset to default expense type
+
+      // After 5 seconds, hide the notification
+      setTimeout(() => {
+        setShowNotification(false);
+      }, 5000);
 
       // Reset user selections
       const resetUserSelections = {};
@@ -341,6 +362,10 @@ function AddExpense() {
                     among all selected users.
                   </li>
                   <li>
+                    If only you are selected: The expense will be saved as a
+                    personal expense.
+                  </li>
+                  <li>
                     If you exclude yourself: You paid for the selected users
                     without splitting.
                   </li>
@@ -368,6 +393,25 @@ function AddExpense() {
           >
             {submitting ? "Adding..." : "Add Expense"}
           </button>
+          {showNotification && notification && (
+            <div className="mt-4 bg-amber-50 border border-amber-200 rounded p-3 text-amber-700">
+              <p className="text-sm flex items-center">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-5 w-5 mr-2"
+                  viewBox="0 0 20 20"
+                  fill="currentColor"
+                >
+                  <path
+                    fillRule="evenodd"
+                    d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z"
+                    clipRule="evenodd"
+                  />
+                </svg>
+                {notification}
+              </p>
+            </div>
+          )}
         </form>
       )}
     </div>

@@ -9,5 +9,16 @@
     "isActive": true,
     "createdBy": "avmaurya07",
     "createdAt": "2025-05-16T14:31:43.613Z"
+  },
+  {
+    "userId": "shikhar",
+    "name": "Shikhar Singh",
+    "email": "shikhar895798@gmail.com",
+    "password": "1234",
+    "isAdmin": false,
+    "isTempPassword": true,
+    "isActive": true,
+    "createdBy": "avmaurya07",
+    "createdAt": "2025-05-16T16:40:13.266Z"
   }
 ]

@@ -1,1 +1,98 @@
-[]
+[
+  {
+    "id": "maqzw3k3ud2du8gfla",
+    "amount": 1000,
+    "description": "www",
+    "paidBy": "avmaurya07",
+    "paidByName": "Avinash Maurya",
+    "splitWith": [
+      "avmaurya07"
+    ],
+    "paidFor": [],
+    "expenseType": "split",
+    "userNames": {
+      "avmaurya07": "Avinash Maurya"
+    },
+    "createdAt": "2025-05-16T16:10:38.211Z"
+  },
+  {
+    "id": "maqzw7fgub5ync2qn4",
+    "amount": 1000,
+    "description": "www",
+    "paidBy": "avmaurya07",
+    "paidByName": "Avinash Maurya",
+    "splitWith": [],
+    "paidFor": [
+      "avmaurya07"
+    ],
+    "expenseType": "personal",
+    "userNames": {
+      "avmaurya07": "Avinash Maurya"
+    },
+    "createdAt": "2025-05-16T16:10:43.228Z"
+  },
+  {
+    "id": "maqzz9rpt2m3u5o9r3s",
+    "amount": 1999.99,
+    "description": "rty",
+    "paidBy": "avmaurya07",
+    "paidByName": "Avinash Maurya",
+    "splitWith": [
+      "avmaurya07"
+    ],
+    "paidFor": [],
+    "expenseType": "split",
+    "userNames": {
+      "avmaurya07": "Avinash Maurya"
+    },
+    "createdAt": "2025-05-16T16:13:06.229Z"
+  },
+  {
+    "id": "mar12cb1ijkcytuafk",
+    "amount": 1000,
+    "description": "lfokfo",
+    "paidBy": "avmaurya07",
+    "paidByName": "Avinash Maurya",
+    "splitWith": [],
+    "paidFor": [
+      "avmaurya07"
+    ],
+    "expenseType": "personal",
+    "userNames": {
+      "avmaurya07": "Avinash Maurya"
+    },
+    "createdAt": "2025-05-16T16:43:29.101Z"
+  },
+  {
+    "id": "mar12v49k1cxso7mspn",
+    "amount": 199,
+    "description": "fjklsdf",
+    "paidBy": "avmaurya07",
+    "paidByName": "Avinash Maurya",
+    "splitWith": [],
+    "paidFor": [
+      "avmaurya07"
+    ],
+    "expenseType": "personal",
+    "userNames": {
+      "avmaurya07": "Avinash Maurya"
+    },
+    "createdAt": "2025-05-16T16:43:53.481Z"
+  },
+  {
+    "id": "mar16faiprkmdtjwofc",
+    "amount": 1990,
+    "description": "sfd",
+    "paidBy": "avmaurya07",
+    "paidByName": "Avinash Maurya",
+    "splitWith": [],
+    "paidFor": [
+      "avmaurya07"
+    ],
+    "expenseType": "personal",
+    "userNames": {
+      "avmaurya07": "Avinash Maurya"
+    },
+    "createdAt": "2025-05-16T16:46:39.594Z"
+  }
+]
