@@ -5,6 +5,10 @@
       "destination": "http://ec2-43-204-148-21.ap-south-1.compute.amazonaws.com:3000/api/:path*"
     },
     {
+      "source": "/api2/:path*",
+      "destination": "http://ec2-43-204-148-21.ap-south-1.compute.amazonaws.com/Roommates/Roommates/roommates-backend/uploades/:path*"
+    },
+    {
       "source": "/:path*",
       "destination": "/"
     }

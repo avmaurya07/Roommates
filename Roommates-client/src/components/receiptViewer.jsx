@@ -141,14 +141,14 @@ function ReceiptViewer() {
                   <div className="flex flex-col items-center">
                     <p className="font-medium mb-2">Receipt:</p>
                     <img
-                      src={`${baseURL.replace("/api/", "")}${
+                      src={`${baseURL.replace("/api2/", "")}${
                         expense.receiptUrl
                       }`}
                       alt="Receipt"
                       className="max-w-full max-h-80 object-contain border rounded-lg"
                     />
                     <a
-                      href={`${baseURL.replace("/api/", "")}${
+                      href={`${baseURL.replace("/api2/", "")}${
                         expense.receiptUrl
                       }`}
                       target="_blank"
