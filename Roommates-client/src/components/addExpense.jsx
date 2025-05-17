@@ -296,7 +296,7 @@ function AddExpense() {
               </button>
             </div>
           </div>
-          <div className="mb-4">
+          {/* <div className="mb-4">
             <label
               htmlFor="receipt"
               className="block text-gray-700 mb-2 font-medium"
@@ -328,7 +328,7 @@ function AddExpense() {
                 </div>
               )}
             </div>
-          </div>{" "}
+          </div>{" "} */}
           {expenseType === "split" && (
             <div className="mb-6">
               <label className="block text-gray-700 mb-2 font-medium">
