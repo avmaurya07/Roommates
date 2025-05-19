@@ -201,7 +201,9 @@ function MyExpenses() {
           // I paid for a group that includes me
           // I'm owed the full amount minus my share
           return {
-            amount: expense.amount - equalShare,
+            amount:
+              expense.amount -
+              (splitWith.includes(currentUserId) ? equalShare : 0),
             type: "owed to you",
           };
         }
@@ -467,7 +469,7 @@ function MyExpenses() {
             )}
           </span>
         </button>
-        <button
+        {/* <button
           onClick={() => setExpenseTypeFilter("paidFor")}
           className={`px-3 py-1 text-sm rounded-full transition ${
             expenseTypeFilter === "paidFor"
@@ -492,7 +494,7 @@ function MyExpenses() {
               </svg>
             )}
           </span>
-        </button>
+        </button> */}
         <button
           onClick={() => setExpenseTypeFilter("personal")}
           className={`px-3 py-1 text-sm rounded-full transition ${

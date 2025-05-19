@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import config from "../config";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faDashboard,
@@ -14,6 +15,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 
 function Navbar() {
+  const baseURL = config.baseURL;
   const [isAdmin, setIsAdmin] = useState(false);
   const [userName, setUserName] = useState("");
   const [remoteSession, setRemoteSession] = useState(false);
@@ -41,7 +43,7 @@ function Navbar() {
           alert(`Returning to your admin account from ${user.name}'s session`);
 
           // Make API call to get admin data
-          fetch(`${window.location.origin}/api/user-lists?userId=${adminId}`, {
+          fetch(`${baseURL}user-lists?userId=${adminId}`, {
             method: "GET",
             headers: {
               "Content-Type": "application/json",

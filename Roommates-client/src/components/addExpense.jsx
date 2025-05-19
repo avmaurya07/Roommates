@@ -149,21 +149,22 @@ function AddExpense() {
             "Only you were selected, so this was saved as a personal expense."
           );
           setShowNotification(true);
-        } else if (includeCurrentUser) {
+        } else {
           // Split among all selected users (including payer)
           formData.append("expenseType", "split");
           formData.append("splitWith", JSON.stringify(selectedUserIds));
           formData.append("paidFor", JSON.stringify([]));
           setNotification("");
           setShowNotification(false);
-        } else {
-          // Payer is not included, so it's a paidFor expense
-          formData.append("expenseType", "paidFor");
-          formData.append("splitWith", JSON.stringify([]));
-          formData.append("paidFor", JSON.stringify(selectedUserIds));
-          setNotification("");
-          setShowNotification(false);
         }
+        //  else {
+        //   // Payer is not included, so it's a paidFor expense
+        //   formData.append("expenseType", "paidFor");
+        //   formData.append("splitWith", JSON.stringify([]));
+        //   formData.append("paidFor", JSON.stringify(selectedUserIds));
+        //   setNotification("");
+        //   setShowNotification(false);
+        // }
       } else if (expenseType === "personal") {
         // Personal expense - only for current user
         formData.append("expenseType", "personal");
@@ -261,7 +262,7 @@ function AddExpense() {
               required
             />
           </div>{" "}
-          <div className="mb-4">
+          {/* <div className="mb-4">
             <label className="block text-gray-700 mb-2 font-medium">
               Expense Type
             </label>
@@ -295,7 +296,7 @@ function AddExpense() {
                 </span>
               </button>
             </div>
-          </div>
+          </div> */}
           {/* <div className="mb-4">
             <label
               htmlFor="receipt"
