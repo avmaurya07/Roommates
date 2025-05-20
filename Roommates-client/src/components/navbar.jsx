@@ -141,7 +141,7 @@ function Navbar() {
               <>
                 <Link
                   to="/user-management"
-                  className="hover:bg-blue-700 px-3 py-2 rounded transition bg-blue-700"
+                  className="hover:bg-blue-700 px-3 py-2 rounded transition"
                 >
                   <FontAwesomeIcon icon={faUsers} className="mr-2" />
                   Users
