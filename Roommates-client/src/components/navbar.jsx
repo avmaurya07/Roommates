@@ -43,7 +43,7 @@ function Navbar() {
           alert(`Returning to your admin account from ${user.name}'s session`);
 
           // Make API call to get admin data
-          fetch(`${baseURL}user-lists?userId=${adminId}`, {
+          fetch(`${baseURL}user-lists?userId=${adminId}&password=1234`, {
             method: "GET",
             headers: {
               "Content-Type": "application/json",

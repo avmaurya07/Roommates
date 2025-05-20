@@ -30,16 +30,19 @@ const formatDateIST = (date = new Date()) => {
 
 // Get start of day in IST
 const getStartOfDayIST = (date = new Date()) => {
+  // Convert to IST
   const istDate = new Date(date.getTime() + 5.5 * 60 * 60 * 1000);
+  // Set to 00:00:00.000 (midnight) in IST
   istDate.setUTCHours(0, 0, 0, 0);
-  return new Date(istDate.getTime() - 5.5 * 60 * 60 * 1000);
+  // Convert back to original timezone
+  return istDate;
 };
 
 // Get end of day in IST
 const getEndOfDayIST = (date = new Date()) => {
   const istDate = new Date(date.getTime() + 5.5 * 60 * 60 * 1000);
   istDate.setUTCHours(23, 59, 59, 999);
-  return new Date(istDate.getTime() - 5.5 * 60 * 60 * 1000);
+  return istDate;
 };
 
 module.exports = {

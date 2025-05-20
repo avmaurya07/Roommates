@@ -182,7 +182,7 @@ function UserManagement() {
           // Store remote user data in localStorage
           localStorage.setItem("userData", JSON.stringify(data.data));
           alert(`You are now logged in as ${user.name}.`);
-          navigate("/dashboard");
+          navigate("/login");
         } else {
           alert(`Remote login failed: ${data.message}`);
         }
