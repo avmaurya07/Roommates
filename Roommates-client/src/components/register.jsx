@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import config from "../config";
 
 function Register() {
@@ -234,9 +234,9 @@ function Register() {
 
         <div className="mt-4 text-center">
           <p>
-            <a href="/dashboard" className="text-blue-600 hover:underline">
+            <Link to="/dashboard" className="text-blue-600 hover:underline">
               Back to Dashboard
-            </a>
+            </Link>
           </p>
         </div>
       </div>
