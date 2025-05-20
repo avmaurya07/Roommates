@@ -215,7 +215,7 @@ function UserManagement() {
       ) : error ? (
         <p className="text-red-500 text-center py-8">Error: {error}</p>
       ) : (
-        <div className="bg-white rounded-lg shadow-md overflow-hidden">
+        <div className="bg-white rounded-lg shadow-md overflow-scroll">
           <table className="min-w-full divide-y divide-gray-200">
             <thead className="bg-gray-50">
               <tr>
