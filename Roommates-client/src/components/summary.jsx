@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import config from "../config";
 
 function Summary() {
@@ -182,12 +183,12 @@ function Summary() {
             )}
 
             <div className="mt-4">
-              <a
-                href="/amount-paid"
+              <Link
+                to="/amount-paid"
                 className="inline-block bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition"
               >
                 Record a Payment
-              </a>
+              </Link>
             </div>
           </div>
         </div>

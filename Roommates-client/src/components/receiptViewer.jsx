@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 import config from "../config";
 import { formatDateForDisplay } from "../utils/dateUtils";
 
@@ -147,8 +147,8 @@ function ReceiptViewer() {
                       alt="Receipt"
                       className="max-w-full max-h-80 object-contain border rounded-lg"
                     />
-                    <a
-                      href={`${baseURL.replace("/api2/", "")}${
+                    <Link
+                      to={`${baseURL.replace("/api2/", "")}${
                         expense.receiptUrl
                       }`}
                       target="_blank"
@@ -156,7 +156,7 @@ function ReceiptViewer() {
                       className="mt-2 text-blue-600 hover:underline"
                     >
                       View Full Size
-                    </a>
+                    </Link>
                   </div>
                 ) : (
                   <p className="text-gray-500 text-center mt-8">
