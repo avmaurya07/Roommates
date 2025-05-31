@@ -25,7 +25,7 @@ import ElectricityManagement from "./components/electricityManagement.jsx";
 
 const Layout = ({ children }) => {
   const location = useLocation();
-  const publicRoutes = ["/login", "/register", "/forgot-password"];
+  const publicRoutes = ["/login", "/forgot-password"];
 
   return (
     <>
