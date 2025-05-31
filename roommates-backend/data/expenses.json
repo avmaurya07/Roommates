@@ -104,5 +104,134 @@
       "avmaurya07": "Avinash Maurya"
     },
     "createdAt": "2025-05-16T18:18:50.065Z"
+  },
+  {
+    "id": "mbckkuyuloa01miil3",
+    "amount": 423,
+    "description": "Electricity Bill (31 May 2025 - 1 Jun 2025)",
+    "paidBy": "avmaurya07",
+    "paidByName": "Avinash Maurya",
+    "splitWith": [
+      "avmaurya07",
+      "shikhar"
+    ],
+    "paidFor": [],
+    "expenseType": "split",
+    "userNames": {
+      "avmaurya07": "Avinash Maurya",
+      "shikhar": "Shikhar Singh"
+    },
+    "createdAt": "2025-06-01T00:02:55.871Z",
+    "electricityBillId": "mbckkuyqm18p1k8038"
+  },
+  {
+    "id": "mbckkw9t8trujgazfv4",
+    "amount": 423,
+    "description": "Electricity Bill (31 May 2025 - 1 Jun 2025)",
+    "paidBy": "avmaurya07",
+    "paidByName": "Avinash Maurya",
+    "splitWith": [
+      "avmaurya07",
+      "shikhar"
+    ],
+    "paidFor": [],
+    "expenseType": "split",
+    "userNames": {
+      "avmaurya07": "Avinash Maurya",
+      "shikhar": "Shikhar Singh"
+    },
+    "createdAt": "2025-06-01T00:02:57.281Z",
+    "electricityBillId": "mbckkw9r3o1mkylzlev"
+  },
+  {
+    "id": "mbcklumgo9gjghxzpao",
+    "amount": 423,
+    "description": "Electricity Bill (31 May 2025 - 1 Jun 2025)",
+    "paidBy": "avmaurya07",
+    "paidByName": "Avinash Maurya",
+    "splitWith": [
+      "avmaurya07",
+      "shikhar"
+    ],
+    "paidFor": [],
+    "expenseType": "split",
+    "userNames": {
+      "avmaurya07": "Avinash Maurya",
+      "shikhar": "Shikhar Singh"
+    },
+    "createdAt": "2025-06-01T00:03:41.765Z",
+    "electricityBillId": "mbcklumeuq1iwzw1ykm"
+  },
+  {
+    "id": "mbcklvkb4djyf3mr5ar",
+    "amount": 423,
+    "description": "Electricity Bill (31 May 2025 - 1 Jun 2025)",
+    "paidBy": "avmaurya07",
+    "paidByName": "Avinash Maurya",
+    "splitWith": [
+      "avmaurya07",
+      "shikhar"
+    ],
+    "paidFor": [],
+    "expenseType": "split",
+    "userNames": {
+      "avmaurya07": "Avinash Maurya",
+      "shikhar": "Shikhar Singh"
+    },
+    "createdAt": "2025-06-01T00:03:42.968Z",
+    "electricityBillId": "mbcklvk82hbe4wwuypx"
+  },
+  {
+    "id": "mbckmq55ele4vh86c9",
+    "amount": 2223,
+    "description": "Electricity Bill (31 May 2025 - 5 Jun 2025)",
+    "paidBy": "avmaurya07",
+    "paidByName": "Avinash Maurya",
+    "splitWith": [
+      "avmaurya07",
+      "shikhar"
+    ],
+    "paidFor": [],
+    "expenseType": "split",
+    "userNames": {
+      "avmaurya07": "Avinash Maurya",
+      "shikhar": "Shikhar Singh"
+    },
+    "createdAt": "2025-06-01T00:04:22.603Z",
+    "electricityBillId": "mbckmq54nkde8f6xgmi"
+  },
+  {
+    "id": "mbcl0924jim4e4w60vh",
+    "amount": 423,
+    "description": "Electricity Bill (31 May 2025 - 1 Jun 2025)",
+    "paidBy": "avmaurya07",
+    "paidByName": "Avinash Maurya",
+    "splitWith": [
+      "avmaurya07"
+    ],
+    "paidFor": [],
+    "expenseType": "split",
+    "userNames": {
+      "avmaurya07": "Avinash Maurya"
+    },
+    "createdAt": "2025-06-01T00:14:53.598Z",
+    "electricityBillId": "mbcl09214y8q4b0f1ia"
+  },
+  {
+    "id": "mbcl0o4sl71ybgnjlep",
+    "amount": 1800,
+    "description": "Electricity Bill (1 Jun 2025 - 5 Jun 2025)",
+    "paidBy": "avmaurya07",
+    "paidByName": "Avinash Maurya",
+    "splitWith": [
+      "shikhar"
+    ],
+    "paidFor": [],
+    "expenseType": "split",
+    "userNames": {
+      "shikhar": "Shikhar Singh"
+    },
+    "createdAt": "2025-06-01T00:15:13.133Z",
+    "electricityBillId": "mbcl0o4poqmfnjid6a"
   }
 ]

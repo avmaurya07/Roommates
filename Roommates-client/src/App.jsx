@@ -21,6 +21,7 @@ import ChangePassword from "./components/changePassword.jsx";
 import ReceiptViewer from "./components/receiptViewer.jsx";
 import UserManagement from "./components/userManagement.jsx";
 import ForgotPassword from "./components/forgotPassword.jsx";
+import ElectricityManagement from "./components/electricityManagement.jsx";
 
 const Layout = ({ children }) => {
   const location = useLocation();
@@ -71,6 +72,10 @@ const App = () => {
             <Route path="/payment-history" element={<PaymentHistory />} />
             <Route path="/receipt/:id" element={<ReceiptViewer />} />
             <Route path="/user-management" element={<UserManagement />} />
+            <Route
+              path="/electricity-management"
+              element={<ElectricityManagement />}
+            />
           </Route>
           {/* Default route */}
           <Route

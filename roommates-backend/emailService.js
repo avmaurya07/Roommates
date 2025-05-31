@@ -321,4 +321,5 @@ module.exports = {
   sendNewPaymentEmail,
   sendNewUserWelcomeEmail,
   sendPasswordResetEmail,
+  sendEmailWithFallback, // Add this export
 };

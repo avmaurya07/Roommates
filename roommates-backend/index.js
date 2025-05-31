@@ -884,6 +884,379 @@ app.post("/api/forgot-password", async (req, res) => {
   }
 });
 
+// ===================== Electricity Management (Admin Only) ====================
+
+// Record new meter reading
+app.post("/api/admin/meter-reading", async (req, res) => {
+  try {
+    const { adminId, adminPassword, reading, readingDate } = req.body;
+
+    // Validate input
+    if (!adminId || !adminPassword || !reading || !readingDate) {
+      return res.status(400).json({ message: "All fields are required" });
+    }
+
+    // Verify admin credentials
+    const users = await readJSON("users.json");
+    const adminUser = users.find(
+      (user) =>
+        user.userId === adminId &&
+        user.password === adminPassword &&
+        user.isAdmin === true &&
+        user.isActive === true
+    );
+
+    if (!adminUser) {
+      return res.status(403).json({
+        message: "Invalid admin credentials or insufficient privileges",
+      });
+    }
+
+    // Ensure reading is a number
+    const meterValue = parseFloat(reading);
+    if (isNaN(meterValue) || meterValue < 0) {
+      return res
+        .status(400)
+        .json({ message: "Reading must be a positive number" });
+    }
+
+    // Load existing readings
+    const readings = await readJSON("meter-readings.json");
+
+    // Check if there's a newer reading already
+    const requestDate = new Date(readingDate);
+    const hasNewerReading = readings.some(
+      (r) => new Date(r.readingDate) > requestDate
+    );
+
+    if (hasNewerReading) {
+      return res.status(400).json({
+        message: "Cannot add reading with date before the latest reading",
+      });
+    }
+
+    // Create new reading
+    const newReading = {
+      id: generateId(),
+      reading: meterValue,
+      readingDate: readingDate,
+      recordedBy: adminId,
+      recordedAt: dateUtils.toISOStringIST(),
+      recordedByName: adminUser.name,
+    };
+
+    readings.push(newReading);
+
+    // Sort readings by date
+    readings.sort((a, b) => new Date(a.readingDate) - new Date(b.readingDate));
+
+    // Save readings
+    await writeJSON("meter-readings.json", readings);
+
+    res.status(201).json({
+      message: "Meter reading recorded successfully",
+      data: newReading,
+    });
+  } catch (error) {
+    console.error("Error recording meter reading:", error);
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
+// Get meter readings
+app.get("/api/admin/meter-readings", async (req, res) => {
+  try {
+    const { adminId, adminPassword } = req.query;
+
+    // Verify admin credentials
+    const users = await readJSON("users.json");
+    const adminUser = users.find(
+      (user) =>
+        user.userId === adminId &&
+        user.password === adminPassword &&
+        user.isAdmin === true &&
+        user.isActive === true
+    );
+
+    if (!adminUser) {
+      return res.status(403).json({
+        message: "Invalid admin credentials or insufficient privileges",
+      });
+    }
+
+    const readings = await readJSON("meter-readings.json");
+
+    // Sort readings by date (newest first)
+    readings.sort((a, b) => new Date(b.readingDate) - new Date(a.readingDate));
+
+    res.status(200).json({
+      data: readings,
+    });
+  } catch (error) {
+    console.error("Error getting meter readings:", error);
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
+// Generate bill for date range
+app.post("/api/admin/generate-bill", async (req, res) => {
+  try {
+    const { adminId, adminPassword, fromDate, toDate, userIds } = req.body;
+
+    // Validate input
+    if (
+      !adminId ||
+      !adminPassword ||
+      !fromDate ||
+      !toDate ||
+      !userIds ||
+      !Array.isArray(userIds) ||
+      userIds.length === 0
+    ) {
+      return res.status(400).json({ message: "All fields are required" });
+    }
+
+    // Verify admin credentials
+    const users = await readJSON("users.json");
+    const adminUser = users.find(
+      (user) =>
+        user.userId === adminId &&
+        user.password === adminPassword &&
+        user.isAdmin === true &&
+        user.isActive === true
+    );
+
+    if (!adminUser) {
+      return res.status(403).json({
+        message: "Invalid admin credentials or insufficient privileges",
+      });
+    }
+
+    // Load readings
+    const readings = await readJSON("meter-readings.json");
+
+    // Filter readings for the selected date range
+    const start = new Date(fromDate);
+    const end = new Date(toDate);
+
+    if (start > end) {
+      return res
+        .status(400)
+        .json({ message: "Start date must be before end date" });
+    }
+
+    const relevantReadings = readings.filter((r) => {
+      const date = new Date(r.readingDate);
+      return date >= start && date <= end;
+    });
+
+    if (relevantReadings.length < 2) {
+      return res.status(400).json({
+        message: "At least two readings are required to calculate a bill",
+      });
+    }
+
+    // Sort by date
+    relevantReadings.sort(
+      (a, b) => new Date(a.readingDate) - new Date(b.readingDate)
+    );
+
+    // Calculate units consumed
+    const startReading = relevantReadings[0].reading;
+    const endReading = relevantReadings[relevantReadings.length - 1].reading;
+    const unitsConsumed = endReading - startReading;
+
+    if (unitsConsumed < 0) {
+      return res
+        .status(400)
+        .json({
+          message: "Invalid readings. End reading is lower than start reading.",
+        });
+    }
+
+    // Calculate total bill at 9 rupees per unit
+    const ratePerUnit = 9;
+    const totalAmount = unitsConsumed * ratePerUnit;
+
+    // Calculate amount per user
+    const userCount = userIds.length;
+    const amountPerUser = totalAmount / userCount;
+
+    // Collect user names
+    const userNames = {};
+    userIds.forEach((userId) => {
+      const user = users.find((u) => u.userId === userId);
+      if (user) {
+        userNames[userId] = user.name;
+      }
+    });
+
+    // Create bill
+    const bills = await readJSON("electricity-bills.json");
+    const newBill = {
+      id: generateId(),
+      fromDate,
+      toDate,
+      startReading,
+      endReading,
+      unitsConsumed,
+      ratePerUnit,
+      totalAmount,
+      userIds,
+      userNames,
+      amountPerUser,
+      createdBy: adminId,
+      createdByName: adminUser.name,
+      createdAt: dateUtils.toISOStringIST(),
+      expenseId: null,
+    };
+
+    // Automatically create an expense record
+    const expenses = await readJSON("expenses.json");
+    const newExpense = {
+      id: generateId(),
+      amount: totalAmount,
+      description: `Electricity Bill (${formatDateForDisplay(
+        fromDate
+      )} - ${formatDateForDisplay(toDate)})`,
+      paidBy: adminId,
+      paidByName: adminUser.name,
+      splitWith: userIds,
+      paidFor: [],
+      expenseType: "split",
+      userNames,
+      createdAt: dateUtils.toISOStringIST(),
+      electricityBillId: newBill.id,
+    };
+
+    // Update bill with expense ID
+    newBill.expenseId = newExpense.id;
+
+    // Save bill and expense
+    bills.push(newBill);
+    expenses.push(newExpense);
+
+    await writeJSON("electricity-bills.json", bills);
+    await writeJSON("expenses.json", expenses);
+
+    // Send email notification about the new electricity bill
+    try {
+      await sendElectricityBillEmail(newBill, users);
+    } catch (emailError) {
+      console.error("Error sending electricity bill email:", emailError);
+    }
+
+    res.status(201).json({
+      message: "Electricity bill generated successfully",
+      data: newBill,
+    });
+  } catch (error) {
+    console.error("Error generating electricity bill:", error);
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
+// Get electricity bills
+app.get("/api/admin/electricity-bills", async (req, res) => {
+  try {
+    const { adminId, adminPassword } = req.query;
+
+    // Verify admin credentials
+    const users = await readJSON("users.json");
+    const adminUser = users.find(
+      (user) =>
+        user.userId === adminId &&
+        user.password === adminPassword &&
+        user.isAdmin === true &&
+        user.isActive === true
+    );
+
+    if (!adminUser) {
+      return res.status(403).json({
+        message: "Invalid admin credentials or insufficient privileges",
+      });
+    }
+
+    const bills = await readJSON("electricity-bills.json");
+
+    // Sort bills by date (newest first)
+    bills.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+
+    res.status(200).json({
+      data: bills,
+    });
+  } catch (error) {
+    console.error("Error getting electricity bills:", error);
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
+// Helper function to format date for display in bill
+function formatDateForDisplay(dateString) {
+  const date = new Date(dateString);
+  return date.toLocaleDateString("en-IN", {
+    year: "numeric",
+    month: "short",
+    day: "numeric",
+  });
+}
+
+// Function to send electricity bill email notifications
+async function sendElectricityBillEmail(bill, users) {
+  try {
+    // Get email addresses of users involved in the bill
+    const recipientEmails = [];
+
+    bill.userIds.forEach((userId) => {
+      const user = users.find((u) => u.userId === userId);
+      if (user && user.email) {
+        recipientEmails.push(user.email);
+      }
+    });
+
+    if (recipientEmails.length === 0) return;
+
+    // Create email content
+    const mailOptions = {
+      from: `"${bill.createdByName}" <roommates545675645@gmail.com>`,
+      to: recipientEmails.join(","),
+      subject: `Electricity Bill: ${formatDateForDisplay(
+        bill.fromDate
+      )} to ${formatDateForDisplay(bill.toDate)}`,
+      html: `
+        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #ddd; border-radius: 5px;">
+          <h2 style="color: #2c3e50;">Electricity Bill Details</h2>
+          
+          <div style="background-color: #f8f9fa; padding: 15px; border-radius: 4px; margin-bottom: 20px;">
+            <p><strong>Period:</strong> ${formatDateForDisplay(
+              bill.fromDate
+            )} to ${formatDateForDisplay(bill.toDate)}</p>
+            <p><strong>Initial Reading:</strong> ${bill.startReading} units</p>
+            <p><strong>Final Reading:</strong> ${bill.endReading} units</p>
+            <p><strong>Units Consumed:</strong> ${bill.unitsConsumed} units</p>
+            <p><strong>Rate:</strong> ₹${bill.ratePerUnit} per unit</p>
+            <p><strong>Total Amount:</strong> ₹${bill.totalAmount.toFixed(
+              2
+            )}</p>
+            <p><strong>Your Share:</strong> ₹${bill.amountPerUser.toFixed(
+              2
+            )} (Split equally among ${bill.userIds.length} users)</p>
+          </div>
+          
+          <p>This bill has been automatically added as an expense in the Roommates App.</p>
+          
+          <p style="margin-top: 20px; font-size: 14px; color: #7f8c8d;">This is an automated message from the Roommates App.</p>
+        </div>
+      `,
+    };
+
+    // Send the email
+    return await emailService.sendEmailWithFallback(mailOptions);
+  } catch (error) {
+    console.error("Error sending electricity bill email:", error);
+  }
+}
+
 // Start the server
 app.listen(PORT, () => {
   console.log(`Roommates backend server running on port ${PORT}`);

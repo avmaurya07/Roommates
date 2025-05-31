@@ -12,6 +12,7 @@ import {
   faHistory,
   faUsers,
   faUserPlus,
+  faBolt,
 } from "@fortawesome/free-solid-svg-icons";
 
 function Navbar() {
@@ -153,6 +154,13 @@ function Navbar() {
                   <FontAwesomeIcon icon={faUserPlus} className="mr-2" />
                   Create User
                 </Link>
+                <Link
+                  to="/electricity-management"
+                  className="hover:bg-blue-700 px-3 py-2 rounded transition"
+                >
+                  <FontAwesomeIcon icon={faBolt} className="mr-2" />
+                  Electricity
+                </Link>
               </>
             )}
             <button
@@ -263,6 +271,14 @@ function Navbar() {
                   >
                     <FontAwesomeIcon icon={faUserPlus} className="mr-2" />
                     Create User
+                  </Link>
+                  <Link
+                    to="/electricity-management"
+                    className="hover:bg-blue-700 px-3 py-2 rounded transition"
+                    onClick={() => setMobileMenuOpen(false)}
+                  >
+                    <FontAwesomeIcon icon={faBolt} className="mr-2" />
+                    Electricity
                   </Link>
                 </>
               )}

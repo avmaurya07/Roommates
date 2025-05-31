@@ -1,0 +1,26 @@
+[
+  {
+    "id": "mbckcldy98kktcqxyr",
+    "reading": 253,
+    "readingDate": "2025-05-31",
+    "recordedBy": "avmaurya07",
+    "recordedAt": "2025-05-31T23:56:29.830Z",
+    "recordedByName": "Avinash Maurya"
+  },
+  {
+    "id": "mbckcz2lukpylbol18h",
+    "reading": 300,
+    "readingDate": "2025-06-01",
+    "recordedBy": "avmaurya07",
+    "recordedAt": "2025-05-31T23:56:47.565Z",
+    "recordedByName": "Avinash Maurya"
+  },
+  {
+    "id": "mbckk9utrnewgvvtjs",
+    "reading": 500,
+    "readingDate": "2025-06-05",
+    "recordedBy": "avmaurya07",
+    "recordedAt": "2025-06-01T00:02:28.133Z",
+    "recordedByName": "Avinash Maurya"
+  }
+]

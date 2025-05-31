@@ -1,0 +1,159 @@
+[
+  {
+    "id": "mbckkuyqm18p1k8038",
+    "fromDate": "2025-05-31",
+    "toDate": "2025-06-01",
+    "startReading": 253,
+    "endReading": 300,
+    "unitsConsumed": 47,
+    "ratePerUnit": 9,
+    "totalAmount": 423,
+    "userIds": [
+      "avmaurya07",
+      "shikhar"
+    ],
+    "userNames": {
+      "avmaurya07": "Avinash Maurya",
+      "shikhar": "Shikhar Singh"
+    },
+    "amountPerUser": 211.5,
+    "createdBy": "avmaurya07",
+    "createdByName": "Avinash Maurya",
+    "createdAt": "2025-06-01T00:02:55.490Z",
+    "expenseId": "mbckkuyuloa01miil3"
+  },
+  {
+    "id": "mbckkw9r3o1mkylzlev",
+    "fromDate": "2025-05-31",
+    "toDate": "2025-06-01",
+    "startReading": 253,
+    "endReading": 300,
+    "unitsConsumed": 47,
+    "ratePerUnit": 9,
+    "totalAmount": 423,
+    "userIds": [
+      "avmaurya07",
+      "shikhar"
+    ],
+    "userNames": {
+      "avmaurya07": "Avinash Maurya",
+      "shikhar": "Shikhar Singh"
+    },
+    "amountPerUser": 211.5,
+    "createdBy": "avmaurya07",
+    "createdByName": "Avinash Maurya",
+    "createdAt": "2025-06-01T00:02:57.183Z",
+    "expenseId": "mbckkw9t8trujgazfv4"
+  },
+  {
+    "id": "mbcklumeuq1iwzw1ykm",
+    "fromDate": "2025-05-31",
+    "toDate": "2025-06-01",
+    "startReading": 253,
+    "endReading": 300,
+    "unitsConsumed": 47,
+    "ratePerUnit": 9,
+    "totalAmount": 423,
+    "userIds": [
+      "avmaurya07",
+      "shikhar"
+    ],
+    "userNames": {
+      "avmaurya07": "Avinash Maurya",
+      "shikhar": "Shikhar Singh"
+    },
+    "amountPerUser": 211.5,
+    "createdBy": "avmaurya07",
+    "createdByName": "Avinash Maurya",
+    "createdAt": "2025-06-01T00:03:41.702Z",
+    "expenseId": "mbcklumgo9gjghxzpao"
+  },
+  {
+    "id": "mbcklvk82hbe4wwuypx",
+    "fromDate": "2025-05-31",
+    "toDate": "2025-06-01",
+    "startReading": 253,
+    "endReading": 300,
+    "unitsConsumed": 47,
+    "ratePerUnit": 9,
+    "totalAmount": 423,
+    "userIds": [
+      "avmaurya07",
+      "shikhar"
+    ],
+    "userNames": {
+      "avmaurya07": "Avinash Maurya",
+      "shikhar": "Shikhar Singh"
+    },
+    "amountPerUser": 211.5,
+    "createdBy": "avmaurya07",
+    "createdByName": "Avinash Maurya",
+    "createdAt": "2025-06-01T00:03:42.920Z",
+    "expenseId": "mbcklvkb4djyf3mr5ar"
+  },
+  {
+    "id": "mbckmq54nkde8f6xgmi",
+    "fromDate": "2025-05-31",
+    "toDate": "2025-06-05",
+    "startReading": 253,
+    "endReading": 500,
+    "unitsConsumed": 247,
+    "ratePerUnit": 9,
+    "totalAmount": 2223,
+    "userIds": [
+      "avmaurya07",
+      "shikhar"
+    ],
+    "userNames": {
+      "avmaurya07": "Avinash Maurya",
+      "shikhar": "Shikhar Singh"
+    },
+    "amountPerUser": 1111.5,
+    "createdBy": "avmaurya07",
+    "createdByName": "Avinash Maurya",
+    "createdAt": "2025-06-01T00:04:22.552Z",
+    "expenseId": "mbckmq55ele4vh86c9"
+  },
+  {
+    "id": "mbcl09214y8q4b0f1ia",
+    "fromDate": "2025-05-31",
+    "toDate": "2025-06-01",
+    "startReading": 253,
+    "endReading": 300,
+    "unitsConsumed": 47,
+    "ratePerUnit": 9,
+    "totalAmount": 423,
+    "userIds": [
+      "avmaurya07"
+    ],
+    "userNames": {
+      "avmaurya07": "Avinash Maurya"
+    },
+    "amountPerUser": 423,
+    "createdBy": "avmaurya07",
+    "createdByName": "Avinash Maurya",
+    "createdAt": "2025-06-01T00:14:53.594Z",
+    "expenseId": "mbcl0924jim4e4w60vh"
+  },
+  {
+    "id": "mbcl0o4poqmfnjid6a",
+    "fromDate": "2025-06-01",
+    "toDate": "2025-06-05",
+    "startReading": 300,
+    "endReading": 500,
+    "unitsConsumed": 200,
+    "ratePerUnit": 9,
+    "totalAmount": 1800,
+    "userIds": [
+      "shikhar"
+    ],
+    "userNames": {
+      "shikhar": "Shikhar Singh"
+    },
+    "amountPerUser": 1800,
+    "createdBy": "avmaurya07",
+    "createdByName": "Avinash Maurya",
+    "createdAt": "2025-06-01T00:15:13.129Z",
+    "expenseId": "mbcl0o4sl71ybgnjlep"
+  }
+]

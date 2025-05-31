@@ -175,6 +175,12 @@ function Dashboard() {
                   >
                     Create New User
                   </Link>
+                  <Link
+                    to="/electricity-management"
+                    className="bg-amber-600 text-white text-center p-4 rounded-lg hover:bg-amber-700 transition"
+                  >
+                    Electricity Management
+                  </Link>
                 </div>
               </>
             )}
