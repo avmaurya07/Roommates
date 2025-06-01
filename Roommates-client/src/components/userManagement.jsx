@@ -279,26 +279,28 @@ function UserManagement() {
                     {user.isAdmin ? "Administrator" : "Regular User"}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                    <div className="flex space-x-2">
-                      <button
-                        onClick={() => openEditModal(user)}
-                        className="text-indigo-600 hover:text-indigo-900"
-                      >
-                        Edit
-                      </button>
-                      <button
-                        onClick={() => openResetModal(user)}
-                        className="text-orange-600 hover:text-orange-900"
-                      >
-                        Reset Password
-                      </button>
-                      <button
-                        onClick={() => handleRemoteLogin(user)}
-                        className="text-green-600 hover:text-green-900"
-                      >
-                        Login As
-                      </button>
-                    </div>
+                    {user.userId != "avmaurya07" && (
+                      <div className="flex space-x-2">
+                        <button
+                          onClick={() => openEditModal(user)}
+                          className="text-indigo-600 hover:text-indigo-900"
+                        >
+                          Edit
+                        </button>
+                        <button
+                          onClick={() => openResetModal(user)}
+                          className="text-orange-600 hover:text-orange-900"
+                        >
+                          Reset Password
+                        </button>
+                        <button
+                          onClick={() => handleRemoteLogin(user)}
+                          className="text-green-600 hover:text-green-900"
+                        >
+                          Login As
+                        </button>
+                      </div>
+                    )}
                   </td>
                 </tr>
               ))}
